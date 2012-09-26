@@ -20,6 +20,14 @@
 .section .init
 .globl _start
 _start:
+/* just leap right into .text area */
+b main
+
+.section .text
+main:
+
+mov sp,#0x8000
+
 
 /* 
 * This command loads the physical address of the GPIO region into r0.
