@@ -1,0 +1,10 @@
+
+This builds on the ok02 example, to converge "bottom up" to xv6
+
+It's mostly used to get the low level stuff figured out.
+
+Bits will graft over from the "top down" project and vice-versa as needed.
+
+The "top down" project will be the eventual output of the effort
+
+
