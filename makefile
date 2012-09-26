@@ -7,7 +7,7 @@
 
 # The toolchain to use. arm-none-eabi works, but there does exist 
 # arm-bcm2708-linux-gnueabi.
-ARMGNU ?= arm-none-eabi
+ARMGNU ?= arm-linux-gnu
 
 # The intermediate directory for compiled object files.
 BUILD = build/
@@ -26,6 +26,8 @@ MAP = kernel.map
 
 # The name of the linker script to use.
 LINKER = kernel.ld
+
+MACHFLAGS = -march=armv6 -mfpu=vfp -mfloat-abi=hard
 
 # The names of all object files that must be generated. Deduced from the 
 # assembly code files in source.
@@ -51,7 +53,7 @@ $(BUILD)output.elf : $(OBJECTS) $(LINKER)
 
 # Rule to make the object files.
 $(BUILD)%.o: $(SOURCE)%.s
-	$(ARMGNU)-as -I $(SOURCE) $< -o $@
+	$(ARMGNU)-as $(MACHFLAGS) -I $(SOURCE) $< -o $@
 
 # Rule to clean files.
 clean : 

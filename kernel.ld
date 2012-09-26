@@ -5,6 +5,11 @@
 *	A linker script for generation of raspberry pi kernel images.
 ******************************************************************************/
 
+OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(_start)
+
+
 SECTIONS {
 	/*
 	* First and formost we need the .init section, containing the IVT.
