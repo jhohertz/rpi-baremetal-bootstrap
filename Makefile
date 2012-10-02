@@ -25,15 +25,18 @@ clean :
 
 # The names of all object files that must be generated. Deduced from the 
 # assembly code files in source.
-AOBJECTS := $(patsubst %.s,%.o,$(wildcard *.s))
+AOBJECTS := $(patsubst %.S,%.o,$(wildcard *.S))
 COBJECTS := $(patsubst %.c,%.o,$(wildcard *.c))
 
 
 # Rule to make the object files.
-%.o: %.s
-	$(ARMGNU)-as $(AOPS) $< -o $@
+%.o: %.S
+	$(ARMGNU)-gcc $(COPS) -fno-pic -nostdinc -I./include -c $< -o $@
+#$(ARMGNU)-as $(AOPS) -I ./include $< -o $@
+#$(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
+
 %.o: %.c
-	$(ARMGNU)-gcc $(COPS) -c $< -o $@
+	$(ARMGNU)-gcc $(COPS) -I ./include -c $< -o $@
 
 $(OUTNAME).elf : kernel.ld $(AOBJECTS) $(COBJECTS)
 	$(ARMGNU)-ld $(AOBJECTS) $(COBJECTS) -T kernel.ld -o $(OUTNAME).elf

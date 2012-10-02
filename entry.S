@@ -7,6 +7,9 @@
 *	Changes since OK01 are marked with NEW.
 ******************************************************************************/
 
+#include <xv6-asm.h>
+#define KERNEL_BASE 0x80000000
+
 /*
 * .section is a diractive to our assembler telling it to place this code first.
 * .globl is a directive to our assembler, that tells it to export this symbol
