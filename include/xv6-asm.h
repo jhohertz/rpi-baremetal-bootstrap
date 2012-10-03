@@ -1,9 +1,6 @@
 
 
-#define PAGE_DIR_SIZE   0x4000
 #define PAGE_DIR_OFFSET 0x4000
-#define TEXT_OFFSET     0x8000
-#define KERNEL_BASE	0x80000000
 
 #ifdef __ASSEMBLY__
 
