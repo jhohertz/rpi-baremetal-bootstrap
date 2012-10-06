@@ -1,10 +1,10 @@
 // Memory layout
 
-#define EXTMEM  0x8000            // Start of extended memory
+#define EXTMEM  0x10000            // Start of extended memory
 #define PHYSTOP 0x8000000           // Top physical memory (128MB split)
 #define DEVSPACE 0x20000000         // Other devices are at high addresses (0x7E000000 in the GPU-mapped addresses)
 
-#define PAGE_DIR_OFFSET 0x4000
+#define PAGE_DIR_OFFSET 0xc000
 
 
 // Key addresses for address space layout (see kmap in vm.c for layout)

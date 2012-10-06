@@ -45,14 +45,6 @@ mov pc, r2
 .globl textstart
 textstart:
 
-/* 
-* turn led on
-*/
-ldr r7,=0x20200000
-mov r0,#1
-lsl r0,#16
-str r0,[r7,#40]
-
 /* STILL not using virtual addresses yet we MUST get a pre-mapped MMU */
 /* table up and running before branching to the real kernel startup   */
 
@@ -76,13 +68,25 @@ mov     r0, #0
 mcr     p15, 0, r0, c7, c7, 0		@ flush the l1 caches
 mcr     p15, 0, r0, c8, c7, 0		@ flush the tlb
 
+
 @ after this stanza, the universe around us is no more, replaced, by a new existance 
 mrc     p15, 0, r0, c1, c0, 0		@ get current config register
 ldr     r1, =MMU_START_CR		@ ARMv6 page tables, instruction cache, datacache, and mmu enable
 orr	r0, r0, r1			@ apply to current
 mcr     p15, 0, r0, c1, c0, 0		@ set modified config register
 
-mov     pc, r6				@ leap into the virtual world, to the real start of our kernel
+/* 
+* turn led on
+ldr r7,=0xa0200000
+mov r0,#1
+lsl r0,#16
+str r0,[r7,#40]
+*/
+
+ldr sp, =0x00007FFF			@ setup a stack pointer
+
+b notmain
+@mov     pc, r6				@ leap into the virtual world, to the real start of our kernel
 
 .align
 __pgtbl_startup_loc:

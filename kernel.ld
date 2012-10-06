@@ -15,15 +15,18 @@ SECTIONS {
 
 	/*
 	* First and formost we need the .init section, containing the IVT.
+	* Not really... loads @ 0x8000.. we have a 16k boot code bit here
+	* We use a few words at most for now.
 	*/
-        . = 0x80000000;
-	.init : AT(0x0000) {
+        . = 0x80008000;
+	.init : AT(0x8000) {
 		*(.init)
 	}
 	
-        . = 0x80004000;
+        /* 16k for level 1 page tables */
+        . = 0x8000c000;
         PROVIDE(pgtbl_startup = .);
-	.pgtbl : AT(0x4000) {
+	.pgtbl : AT(0xc000) {
                 FILL(0x00000000)
                 LONG(0x0000000e)
                 LONG(0x0010000e)
@@ -44,9 +47,10 @@ SECTIONS {
 	/* 
 	* We allow room for the ATAGs and the stack and then start our code at
 	* 0x8000.
+	* Again... not really, we load @ 0x8000, and ATAGs are just fine
 	*/
-        . = 0x80008000;
-	.text : AT(0x8000) {
+        . = 0x80010000;
+	.text : AT(0x10000) {
 		*(.text)
 	}
         PROVIDE(etext = .);

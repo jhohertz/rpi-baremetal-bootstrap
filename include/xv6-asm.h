@@ -1,7 +1,5 @@
 
 
-#define PAGE_DIR_OFFSET 0x4000
-
 #ifdef __ASSEMBLY__
 
 /* handy macros for assembly work */

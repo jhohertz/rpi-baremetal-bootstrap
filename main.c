@@ -8,13 +8,15 @@ extern char end[]; // first address after kernel loaded from ELF file
 extern char pgtbl_startup[]; // first address after kernel loaded from ELF file
 
 #define GPFSEL1 0xa0200004
-#define GPSET0  0xa020001C
+#define GPSET0  0xa020001C             
 #define GPCLR0  0xa0200028
 
 
 int notmain(void) {
 
     unsigned int ra;
+
+//    PUT32(GPCLR0,1<<16);
 
     ra=GET32(GPFSEL1);
     ra&=~(7<<18);
