@@ -4,6 +4,8 @@
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
+extern char end[]; // first address after kernel loaded from ELF file
+extern char pgtbl_startup[]; // first address after kernel loaded from ELF file
 
 #define GPFSEL1 0xa0200004
 #define GPSET0  0xa020001C
@@ -29,5 +31,4 @@ int notmain(void) {
     return(0);
 
 }
-
 

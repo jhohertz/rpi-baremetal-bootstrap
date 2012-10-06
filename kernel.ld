@@ -22,13 +22,23 @@ SECTIONS {
 	}
 	
         . = 0x80004000;
-        PROVIDE(pgtbl_base = .);
+        PROVIDE(pgtbl_startup = .);
 	.pgtbl : AT(0x4000) {
                 FILL(0x00000000)
-                LONG(0xdeadbeef)
+                LONG(0x0000000e)
+                LONG(0x0010000e)
+                LONG(0x0020000e)
+                LONG(0x0030000e)
                 . = 0x2000;
-                LONG(0x12345678)
-                 
+                LONG(0x0000000e)
+                LONG(0x0010000e)
+                LONG(0x0020000e)
+                LONG(0x0030000e)
+                . = 0x2800;
+                LONG(0x20000002)
+                LONG(0x20100002)
+                LONG(0x20200002)
+                LONG(0x20300002)
 	}
 
 	/* 
