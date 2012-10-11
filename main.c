@@ -1,8 +1,12 @@
 
+#include <types.h>
+#include <defs.h>
+#include <proc.h>
+
 // this is all just temporary....
 
-extern void PUT32 ( unsigned int, unsigned int );
-extern unsigned int GET32 ( unsigned int );
+//extern void PUT32 ( unsigned int, unsigned int );
+//extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
 extern char end[]; // first address after kernel loaded from ELF file
 extern char pgtbl_startup[]; // first address after kernel loaded from ELF file
@@ -11,10 +15,13 @@ extern char pgtbl_startup[]; // first address after kernel loaded from ELF file
 #define GPSET0  0xa020001C             
 #define GPCLR0  0xa0200028
 
+struct cpu *cpu;
+struct cpu cpu_data;
 
 int notmain(void) {
 
     unsigned int ra;
+    cpu = &cpu_data;
 
 //    PUT32(GPCLR0,1<<16);
 

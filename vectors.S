@@ -9,9 +9,37 @@ GET32:
     ldr r0,[r0]
     bx lr
 
+.globl PUT8
+PUT8:
+    strb r1,[r0]
+    bx lr
+
+.globl GET8
+GET8:
+    ldrb r0,[r0]
+    bx lr
+
 .globl dummy
 dummy:
     bx lr
+
+.globl _cli
+_cli:
+	cpsid	i
+	bx	lr
+
+.globl _sti
+_sti:
+	cpsie	i
+	bx	lr
+
+.globl _checki
+_checki:
+	mrs	r0, cpsr
+	lsr	r0, #7
+	and	r0, r0, #1
+	bx	lr
+
 
 
 /* Clean and invalidate entire data cache */
@@ -138,4 +166,36 @@ stop_l1cache:
     bic r0,r0,#0x0004 ;@ data
     bl mmu_set_cr
     bx lr
+
+/* Take a spinlock, waiting for it to clear if needed
+ *
+ *   r0 = address of the spinlock
+ 
+ */
+.globl _spinlock_take
+_spinlock_take:
+        mov	r2, r0			@ shuffle the address over
+	ldr	r3, =1			@ we need the "locked" value in reg to store it
+_spinlock_take_loop:
+	ldrex	r0, [r2]		@ and replace with the exclusive read of it
+	cmp	r0, #1			@ test if its locked already, if not:
+        strexne	r0, r3, [r2]		@   try to claim the lock, r0 = 0 on success, 1 on fail
+	cmpne	r0, #1			@   check for a fail
+	beq	_spinlock_take_loop	@ loop until we get it
+	bx	lr
+
+/* Release a spinlock
+ *
+ *   r0 = address of the spinlock
+ 
+ */
+.globl _spinlock_give
+_spinlock_give:
+	mov	r3, #0			@ we need the "locked" value in reg to store it
+        str	r3, [r0]		@   try to claim the lock, r0 = 0 on success, 1 on fail
+	bx	lr
+
+
+
+	
 

@@ -54,6 +54,10 @@ SECTIONS {
 		*(.text)
 	}
         PROVIDE(etext = .);
+
+        .rodata : {
+                *(.rodata .rodata.* .gnu.linkonce.r.*)
+        }
 	
 	/* 
 	* Next we put the data.
@@ -65,7 +69,7 @@ SECTIONS {
         PROVIDE(edata = .);
 
         .bss : {
-                *(.bss)
+                *(.bss) *(COMMON)
         }
 
         PROVIDE(end = .);

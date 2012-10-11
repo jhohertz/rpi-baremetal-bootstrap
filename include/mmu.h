@@ -11,3 +11,9 @@
 #define TTBR_FLAGS       TTBR_RGN_WBWA
 #define MMU_START_CR	0x00801005
 
+#define PGSIZE          4096    // bytes mapped by a page
+
+#define PGROUNDUP(sz)  (((sz)+PGSIZE-1) & ~(PGSIZE-1))
+#define PGROUNDDOWN(a) (((a)) & ~(PGSIZE-1))
+
+

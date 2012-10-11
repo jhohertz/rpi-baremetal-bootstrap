@@ -25,9 +25,17 @@ clean :
 
 # The names of all object files that must be generated. Deduced from the 
 # assembly code files in source.
-AOBJECTS := $(patsubst %.S,%.o,$(wildcard *.S))
-COBJECTS := $(patsubst %.c,%.o,$(wildcard *.c))
+#AOBJECTS := $(patsubst %.S,%.o,$(wildcard *.S))
+#COBJECTS := $(patsubst %.c,%.o,$(wildcard *.c))
 
+
+OBJECTS = \
+	kalloc.o\
+	main.o\
+	spinlock.o\
+	string.o\
+	vectors.o\
+	entry.o\
 
 # Rule to make the object files.
 %.o: %.S
@@ -38,8 +46,8 @@ COBJECTS := $(patsubst %.c,%.o,$(wildcard *.c))
 %.o: %.c
 	$(ARMGNU)-gcc $(COPS) -I ./include -c $< -o $@
 
-$(OUTNAME).elf : kernel.ld $(AOBJECTS) $(COBJECTS)
-	$(ARMGNU)-ld $(AOBJECTS) $(COBJECTS) -T kernel.ld -o $(OUTNAME).elf
+$(OUTNAME).elf : kernel.ld $(OBJECTS)
+	$(ARMGNU)-ld $(OBJECTS) -T kernel.ld -o $(OUTNAME).elf
 	$(ARMGNU)-objdump -D $(OUTNAME).elf > $(OUTNAME).list
 
 $(OUTNAME).bin : $(OUTNAME).elf
