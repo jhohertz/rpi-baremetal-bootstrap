@@ -35,7 +35,8 @@ OBJECTS = \
 	spinlock.o\
 	string.o\
 	vectors.o\
-	entry.o\
+	entry.o
+#	vm.o\
 
 # Rule to make the object files.
 %.o: %.S

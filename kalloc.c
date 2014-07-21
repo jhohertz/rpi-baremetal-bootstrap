@@ -26,7 +26,8 @@ struct {
 
 // Initialization happens in two phases.
 // 1. main() calls kinit1() while still using entrypgdir to place just
-// the pages mapped by entrypgdir on free list.
+// the pages mapped by entrypgdir on free list. This happens from the end of
+// code+data, to the end of the first 4MB of memory
 // 2. main() calls kinit2() with the rest of the physical pages
 // after installing a full page table that maps them on all cores.
 void
@@ -37,6 +38,7 @@ kinit1(void *vstart, void *vend)
   freerange(vstart, vend);
 }
 
+// called to init rest of memory, from 4MB to PHYSTOP
 void
 kinit2(void *vstart, void *vend)
 {
@@ -61,19 +63,26 @@ freerange(void *vstart, void *vend)
 void
 kfree(char *v)
 {
-  struct run *r;
+  struct run *r;	// list entry
 
+  // panic if we didnt ask for a page aligned address, it's... below end?, or translated as virtual over PHYSTOP? (odd)
   if((uint)v % PGSIZE || v < end || v2p(v) >= PHYSTOP)
     for(;;);	// panic("kfree");
 
   // Fill with junk to catch dangling refs.
   memset(v, 1, PGSIZE);
 
+  // take lock if needed
   if(kmem.use_lock)
     acquire(&kmem.lock);
+
+  // free node is put at top of the free page (neat)
   r = (struct run*)v;
+  // insert at front of the freelist
   r->next = kmem.freelist;
   kmem.freelist = r;
+
+  // release lock if needed
   if(kmem.use_lock)
     release(&kmem.lock);
 }
@@ -84,15 +93,23 @@ kfree(char *v)
 char*
 kalloc(void)
 {
+  // pointer to the run
   struct run *r;
 
+  // lock if needed
   if(kmem.use_lock)
     acquire(&kmem.lock);
+
+  // get the freelist head
   r = kmem.freelist;
   if(r)
+    // point head to next item
     kmem.freelist = r->next;
+
+  // unlock if needed
   if(kmem.use_lock)
     release(&kmem.lock);
+
   return (char*)r;
 }
 

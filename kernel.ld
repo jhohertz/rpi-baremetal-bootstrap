@@ -59,6 +59,9 @@ SECTIONS {
                 *(.rodata .rodata.* .gnu.linkonce.r.*)
         }
 	
+	/* text and rodata get marked read only in the MMU, ensure a clean page boundary at the end */
+	. = ALIGN(0x1000);
+
 	/* 
 	* Next we put the data.
 	*/
